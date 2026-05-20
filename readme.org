@@ -9,7 +9,7 @@ Global userstyle that changes base font to your favorite base font.
 ** Installation
 You have to install [[https://add0n.com/stylus.html][Stylus]] and then click on the install link below.
 
-[[https://raw.githubusercontent.com/vednoc/custom-fonts/main/fonts.user.styl][https://img.shields.io/badge/Install%20directly%20with-Stylus-116b59.svg?longCache=true&style=flat]]
+[[https://raw.githubusercontent.com/NVHT/Custom-Fonts-Enhanced/refs/heads/main/fonts.user.styl][https://img.shields.io/badge/Install%20directly%20with-Stylus-116b59.svg?longCache=true&style=flat]]
 
 ** Contributing
 If you have any feature requests, feel free to open an issue.
