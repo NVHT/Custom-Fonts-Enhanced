@@ -1,7 +1,7 @@
 #+STARTUP: nofold
 #+HTML: <div align="center">
 
-* Custom fonts
+* Custom Fonts
 Global userstyle that changes base font to your favorite base font.
 
 [[https://github.com/vednoc/custom-fonts/releases][https://img.shields.io/github/v/tag/vednoc/custom-fonts.svg?label=version&style=flat]]
