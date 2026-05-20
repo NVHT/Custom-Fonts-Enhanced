@@ -4,11 +4,6 @@
 * Custom Fonts
 Global userstyle that changes base font to your favorite base font.
 
-[[https://github.com/vednoc/custom-fonts/releases][https://img.shields.io/github/v/tag/vednoc/custom-fonts.svg?label=version&style=flat]]
-[[https://github.com/vednoc/custom-fonts/stargazers][https://img.shields.io/github/stars/vednoc/custom-fonts.svg?style=flat]]
-[[https://github.com/vednoc/custom-fonts/network][https://img.shields.io/github/forks/vednoc/custom-fonts.svg?color=007ec6&style=flat]]
-[[https://raw.githubusercontent.com/vednoc/custom-fonts/main/fonts.user.styl][https://img.shields.io/badge/Install%20directly%20with-Stylus-116b59.svg?longCache=true&style=flat]]
-
 #+HTML: </div>
 
 ** Installation
