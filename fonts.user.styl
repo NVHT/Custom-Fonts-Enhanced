@@ -1,40 +1,38 @@
 /* ==UserStyle==
-@name           Custom Fonts (Enhanced)
+@name           Custom Fonts Enhanced
 @namespace      https://github.com/NVHT/Custom-Fonts-Enhanced
-@version        1.0
-@description    Apply custom fonts globally while preserving icons and code blocks.
+@version        2.0
+@description    Apply custom fonts globally.
 @author         NVHT
 @preprocessor   stylus
 @license        MIT
 
-@var text     base              "Base font"                    "sans-serif"
-@var select   baseStyle         "Base style"                   {"Default*": "null", "Normal": "normal", "Italic": "italic"}
-@var select   baseWeight        "Base weight"                  {"Default*": "null", "300": "300", "400": "400", "500": "500", "600": "600", "700": "700"}
+@var text       base           "Base font"                    "sans-serif"
+@var select     baseStyle      "Base style"                   {"Default*": "null", "Normal": "normal", "Italic": "italic"}
+@var select     baseWeight     "Base weight"                  {"Default*": "null", "300": "300", "400": "400", "500": "500", "600": "600", "700": "700"}
 
-@var text     mono              "Mono font"                    "monospace"
-@var select   monoWeight        "Mono weight"                  {"Default*": "null", "400": "400", "700": "700"}
+@var text       mono           "Mono font"                    "monospace"
+@var select     monoWeight     "Mono weight"                  {"Default*": "null", "400": "400", "700": "700"}
+@var checkbox   inputs         "Use Mono in text inputs"      0
 
-@var checkbox smoothing         "Enable font smoothing"        1
-@var checkbox enhancer          "Enable super enhancer"        1
-@var range    enhanceWeight     "Enhancer boldness (stroke)"   [0.15, 0, 1, 0.05, "px"]
-@var range    enhanceShadow     "Enhancer smoothness (shadow)" [0.25, 0, 1, 0.05, "px"]
-@var checkbox inputs            "Use Mono in inputs"           0
-@var checkbox letterSpacing     "Force 0px spacing"            0
+@var range      tracking       "Letter spacing"               [0.02, -0.05, 0.1, 0.01, "em"]
+
+@var checkbox   enhancer       "Font enhancer"                1
+@var range      enhanceWeight  "Enhancer boldness (stroke)"   [0.01, 0, 0.1, 0.005, "em"]
+@var range      enhanceShadow  "Enhancer smoothness (shadow)" [0.01, 0, 0.1, 0.005, "em"]
+
 ==/UserStyle== */
 
 // --- CATEGORIZED EXCLUSIONS ---
 
-// Iconography (Preserve original fonts)
-icons = 'i', 'icon', '.i', '.icon', '[class*=icon]', '[icon]', '[class*=symbol]', '[class*=icofont]', '.fa', '.fab', '.fad', '.fal', '.far', '.fas', '.fa-solid', '.fa-regular', '.fa-light', '.glyphicon', '.ddgsi', '.fancybox-button', '[data-icon-name]', '[class*=tgico-]', '.tgico', 'mjx-math', 'mjx-math *', '.mathjax', '.mathjax *', '[id^=MathJax]', '[class*=MathJax]', '.material-icons', '.material-symbols-outlined', '[class^="ph-"]', '.carbon-icon', '[data-testid="icon"]', '.emoji', '.apple-emoji', 'lt-div', 'lt-div *', '.resource-tile_rating *', '.br-theme-fontawesome-stars *'
+icons = 'svg', 'i', 'icon', '.i', '.icon', '[class*=icon]', '[icon]', '[class*=symbol]', '[class*=icofont]', '.fa', '.fab', '.fad', '.fal', '.far', '.fas', '.fa-solid', '.fa-regular', '.fa-light', '.glyphicon', '.ddgsi', '.fancybox-button', '[data-icon-name]', '[class*=tgico-]', '.tgico', 'mjx-math', '.mathjax', '[id^=MathJax]', '[class*=MathJax]', '.katex', '.katex-display', '.material-icons', '.material-symbols-outlined', '[class^="ph-"]', '.carbon-icon', '[data-testid="icon"]', '.emoji', '.apple-emoji', 'lt-div', '.resource-tile_rating', '.br-theme-fontawesome-stars'
 
-// Code & Technical Areas
-code = 'code', '.code', 'pre', '.pre', '.monospace', '.text-mono', '.font-mono', '[class*=monospace]', '.ace_editor', '.CodeMirror', '.cm-editor', '.cm-scroller', '.monaco-editor', '.diff-line-num', '.diff-viewer', '.d2h-code-wrapper', '#commandWindowWrapper', '.react-code-lines', '.react-code-text', '.blob-code', '.blob-num'
+code = 'code', '.code', 'pre', '.pre', 'kbd', 'samp', 'var', '.monospace', '.text-mono', '.font-mono', '[class*=monospace]', '.ace_editor', '.CodeMirror', '.cm-editor', '.cm-scroller', '.monaco-editor', '.diff-line-num', '.diff-viewer', '.d2h-code-wrapper', '#commandWindowWrapper', '.react-code-lines', '.react-code-text', '.blob-code', '.blob-num'
 
-// Input & Editing Areas
 composer = 'textarea', 'input:not([type=button]):not([type=submit]):not([type=reset])', '[contenteditable=true]', '[g_editable]', '#squire', '.QueryBuilder-StyledInputContainer', '[data-slate-editor=true]', '[class*=channelTextArea-]'
 
-// Text to preserve weight
-bold = 'strong', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', '[class*=bold]', '[data-markup*="bold"]'
+bold = 'strong', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'th', '[class*=bold]', '[data-markup*="bold"]'
+italic = 'em', 'i:not([class*=icon])', 'cite', 'dfn', 'address', 'q'
 
 // --- LOGIC HELPER ---
 
@@ -42,70 +40,88 @@ add_wildcards(list)
     new_list = ()
     for item in list
         append(new_list, item)
-        // Add child selector support for non-attribute selectors safely
-        // '\\x5b' matches '[' without triggering Stylus parser bugs
         if !match('\\x5b', item)
             append(new_list, item + ' *')
     return new_list
 
-$icons    = join(', ', icons)
+$icons    = join(', ', add_wildcards(icons))
 $code     = join(', ', add_wildcards(code))
 $composer = join(', ', add_wildcards(composer))
 $bold     = join(', ', add_wildcards(bold))
-$all_excluded = $icons + ', ' + $code + ', ' + $composer + ', body > div'
+$italic   = join(', ', add_wildcards(italic))
+
+// Combine basic exclusions (for font-family)
+$family_excluded = $icons + ', ' + $code + ', ' + $composer
+
+// Combine extended exclusions (for weights and styles)
+$weight_excluded = $family_excluded + ', ' + $bold
+$style_excluded  = $family_excluded + ', ' + $italic
 
 // --- STYLES ---
 
 @-moz-document regexp('(file|https?|(chrome|moz)-extension)://.+') {
 
-    if smoothing {
-        * {
-            -webkit-font-smoothing: antialiased !important;
-            -moz-osx-font-smoothing: grayscale !important;
-        }
+    // 1. Base Font Rendering (Always Enabled)
+    *, ::before, ::after {
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
     }
 
     if enhancer {
         * {
             text-rendering: optimizeLegibility !important;
-            text-decoration-skip-ink: auto !important;
-            font-synthesis: none !important;
         }
         
-        // Apply rendering enhancements only to text, carefully excluding icon fonts to avoid bloating/blurring icons
-        :not({$icons}) {
+        :not(:is({$icons})) {
             -webkit-text-stroke: enhanceWeight currentColor !important if enhanceWeight != 0px
             text-shadow: 0 0 enhanceShadow currentColor !important if enhanceShadow != 0px
         }
-    }
-
-    // Main Font Application
-    :not({$all_excluded}) {
-        font-family: base !important if base != 'null'
-        font-style:  baseStyle !important if baseStyle != 'null'
-        letter-spacing: 0px !important if letterSpacing
-    }
-
-    // Weight Management (Don't override headers/bold)
-    :not({$bold}):not({$icons}) {
-        font-weight: baseWeight if baseWeight != 'null'
-    }
-
-    // Monospace Overrides
-    {$code} {
-        font-family: mono !important if mono != 'null'
-        font-weight: monoWeight if monoWeight != 'null'
-    }
-
-    // Input/Composer Overrides
-    {$composer} {
-        if inputs {
-            font-family: mono !important if mono != 'null'
-            font-weight: monoWeight if monoWeight != 'null'
-        } else {
-            font-family: base !important if base != 'null'
-            font-weight: baseWeight if baseWeight != 'null'
+        
+        @media print {
+            * {
+                -webkit-text-stroke: 0 !important;
+                text-shadow: none !important;
+            }
         }
     }
 
+    // 2. Font Family & Tracking
+    :not(:is({$family_excluded})) {
+        font-family: base !important if base != 'null'
+        font-optical-sizing: auto !important;
+        font-kerning: normal !important;
+        font-variant-ligatures: common-ligatures !important;
+        letter-spacing: tracking !important if tracking != 0em;
+    }
+
+    // 3. Font Weight (Explicitly excludes bold tags so they don't lose their weight)
+    :not(:is({$weight_excluded})) {
+        font-weight: baseWeight !important if baseWeight != 'null'
+    }
+
+    // 4. Font Style (Explicitly excludes italic tags so they don't lose their slant)
+    :not(:is({$style_excluded})) {
+        font-style: baseStyle !important if baseStyle != 'null'
+    }
+
+    // 5. Monospace Overrides
+    :is({$code}) {
+        font-family: mono !important if mono != 'null'
+        font-weight: monoWeight !important if monoWeight != 'null'
+        font-variant-ligatures: contextual !important;
+        letter-spacing: normal !important; // Prevent spacing from messing up code alignment
+    }
+
+    // 6. Text Input Overrides
+    :is({$composer}) {
+        if inputs {
+            font-family: mono !important if mono != 'null'
+            font-weight: monoWeight !important if monoWeight != 'null'
+            letter-spacing: normal !important;
+        } else {
+            font-family: base !important if base != 'null'
+            font-weight: baseWeight !important if baseWeight != 'null'
+            letter-spacing: tracking !important if tracking != 0em;
+        }
+    }
 }
